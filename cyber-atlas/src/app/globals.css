@@ -1,26 +1,78 @@
 @import "tailwindcss";
 
+/* -------------------------------
+   Root Variables (Light & Dark)
+---------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Colors */
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-primary: #00ffff; /* neon cyan accent for cyber theme */
+  --color-secondary: #0f0f0f;
+
+  /* Fonts */
+  --font-sans: "Inter", "Roboto", sans-serif;
+  --font-mono: "Fira Code", "JetBrains Mono", monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Dark Mode Overrides */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-background: #0a0a0a;
+    --color-foreground: #ededed;
+    --color-primary: #00ffff; 
+    --color-secondary: #111111;
   }
 }
 
+/* -------------------------------
+   Base Styles
+---------------------------------- */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+  background-color: rgba(0,0,0,0.05);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  color: var(--color-foreground);
+}
+
+/* -------------------------------
+   Utility CSS Variables
+---------------------------------- */
+:root {
+  --border-radius: 0.5rem;
+  --transition-fast: 0.2s ease;
+}
+
+/* -------------------------------
+   Link Styles
+---------------------------------- */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: #0ff; /* slightly brighter cyan */
+}
+
+/* -------------------------------
+   Theme Inline Support (Optional)
+---------------------------------- */
+@theme inline {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
