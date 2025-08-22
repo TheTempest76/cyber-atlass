@@ -4,12 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
 
-export default function SignupPage() {
+export default function SigninPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -23,43 +23,29 @@ export default function SignupPage() {
     setMessage("");
 
     try {
-      // 1️⃣ Sign up user
-      const userCred = await createUserWithEmailAndPassword(
-        auth,
-        form.email,
-        form.password
-      );
+      // 1️⃣ Sign in user
+      const userCred = await signInWithEmailAndPassword(auth, form.email, form.password);
 
-      // 2️⃣ Set display name in Firebase Auth
-      if (form.name) {
-        await updateProfile(userCred.user, { displayName: form.name });
-      }
-
-      // 3️⃣ Get location (ask user permission)
+      // 2️⃣ Get location (ask user permission)
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
 
-          // 4️⃣ Store user data in Firestore
-          await setDoc(doc(db, "users", userCred.user.uid), {
-            name: form.name,
-            email: form.email,
+          // 3️⃣ Update Firestore document
+          await updateDoc(doc(db, "users", userCred.user.uid), {
             location: { latitude, longitude },
-            createdAt: new Date(),
+            lastLogin: new Date(),
           });
 
-          // 5️⃣ Navigate to Home page
+          // 4️⃣ Redirect to Home page
           router.push("/Home");
         },
         async (error) => {
           console.warn("Location not available:", error);
 
-          // Store user anyway without location
-          await setDoc(doc(db, "users", userCred.user.uid), {
-            name: form.name,
-            email: form.email,
-            location: null,
-            createdAt: new Date(),
+          // Update Firestore without location
+          await updateDoc(doc(db, "users", userCred.user.uid), {
+            lastLogin: new Date(),
           });
 
           router.push("/Home");
@@ -79,18 +65,8 @@ export default function SignupPage() {
         className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg"
       >
         <h1 className="mb-6 text-2xl font-bold text-center text-gray-800">
-          Create an Account
+          Sign In
         </h1>
-
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={form.name}
-          onChange={handleChange}
-          required
-          className="mb-4 w-full rounded-lg border p-3 focus:border-blue-500 focus:ring focus:ring-blue-200"
-        />
 
         <input
           type="email"
@@ -118,14 +94,14 @@ export default function SignupPage() {
             disabled={loading}
             className="w-1/2 rounded-lg bg-blue-600 py-3 text-white font-semibold hover:bg-blue-700 transition"
           >
-            {loading ? "Signing up..." : "Sign Up"}
+            {loading ? "Signing in..." : "Sign In"}
           </button>
 
           <Link
-            href="/Auth/signin"
+            href="/signup"
             className="w-1/2 rounded-lg bg-gray-200 py-3 text-center font-semibold text-gray-700 hover:bg-gray-300 transition"
           >
-            Sign In
+            Sign Up
           </Link>
         </div>
 
