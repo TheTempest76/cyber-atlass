@@ -18,9 +18,9 @@ export default function Navbar() {
   const navLinks = [
     { name: "Threat Reports", href: "/Home" },
     { name: "Verify Threat", href: "/Home/verify" },
+    { name: "Cyber Intel", href: "/News" },
     { name: "Threat Map", href: "/Home/map" },
-    { name: "Phish Finder", href: "/Home/phish-finder" },
-    { name: "Cyber Intel", href: "/Home/news" },
+    { name: "Phish Finder", href: "/Home/phish-finder" }
   ];
 
   const handleLogout = () => {

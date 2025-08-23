@@ -93,7 +93,7 @@ export default function CybercrimeNewsPage() {
   };
 
   const handleBackToReports = () => {
-    router.push("/Home/reports"); // Adjust path as needed
+    router.push("/Home"); // Adjust path as needed
   };
 
   if (loading && articles.length === 0) {
@@ -119,7 +119,7 @@ export default function CybercrimeNewsPage() {
             onClick={handleBackToReports}
             className="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-green-500 hover:from-cyan-400 hover:to-green-400 text-gray-900 font-semibold shadow-lg transition-all"
           >
-            Back to Reports
+            Back to Home
           </button>
         </div>
 
