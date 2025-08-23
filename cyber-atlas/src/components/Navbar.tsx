@@ -18,7 +18,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Threat Reports", href: "/Home" },
     { name: "Verify Threat", href: "/Home/verify" },
-    { name: "Cyber Intel", href: "/News" },
+    { name: "Cyber Intel", href: "/Home/News" },
     { name: "Threat Map", href: "/Home/map" },
     { name: "Phish Finder", href: "/Home/phish-finder" }
   ];
