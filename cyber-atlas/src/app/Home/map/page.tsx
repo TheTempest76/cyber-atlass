@@ -1,6 +1,6 @@
 "use client";
 
-import { GoogleMap, LoadScript, Marker, InfoWindow, MarkerClusterer } from "@react-google-maps/api";
+import { GoogleMap, Marker, InfoWindow, MarkerClusterer, useJsApiLoader } from "@react-google-maps/api";
 import { useState } from "react";
 
 // Map container style
@@ -33,26 +33,26 @@ const scamTypesList = [
 
 // Marker colors by scam type
 const markerColors: Record<string, string> = {
-  "Fake E-commerce Scam": "red",
-  "Fake Job Offer Scam": "orange",
-  "SIM Card Replacement Scam": "yellow",
-  "WhatsApp Account Hacking Scam": "purple",
-  "Cryptocurrency Investment Scam": "green",
-  "UPI Scam": "blue",
-  "WhatsApp Lottery/Prize Scam": "pink",
-  "Phishing Scam (Link Sharing)": "cyan",
-  "Fake Technical Support Scam": "lime",
-  "Fake Charity/Donation Scam": "magenta",
-  "Fake Loan Approval Scam": "teal",
-  "Fake Discount/Refund Scam": "violet",
-  "Tax Refund Scam": "brown",
-  "Friend in Distress Scam": "gray",
+  "Fake E-commerce Scam": "#FF4C4C",
+  "Fake Job Offer Scam": "#FF9900",
+  "SIM Card Replacement Scam": "#FFD700",
+  "WhatsApp Account Hacking Scam": "#800080",
+  "Cryptocurrency Investment Scam": "#00CC44",
+  UPI: "#3399FF",
+  "WhatsApp Lottery/Prize Scam": "#FF66CC",
+  "Phishing Scam (Link Sharing)": "#00FFFF",
+  "Fake Technical Support Scam": "#99FF33",
+  "Fake Charity/Donation Scam": "#FF00FF",
+  "Fake Loan Approval Scam": "#00CCCC",
+  "Fake Discount/Refund Scam": "#8A2BE2",
+  "Tax Refund Scam": "#A52A2A",
+  "Friend in Distress Scam": "#808080",
 };
 
 // Recency filters
 const recencyFilters = ["Last 24h", "Last 7 days", "Last 30 days", "All time"];
 
-// Real Indian cities
+// Indian cities
 const indianCities = [
   { name: "Delhi", lat: 28.7041, lng: 77.1025 },
   { name: "Mumbai", lat: 19.076, lng: 72.8777 },
@@ -68,14 +68,12 @@ const indianCities = [
   { name: "Bhopal", lat: 23.2599, lng: 77.4126 },
 ];
 
-// Generate realistic mock reports
+// Generate mock reports
 const generateMockReports = (count = 300) => {
   const reports = [];
   for (let i = 0; i < count; i++) {
     const scamType = scamTypesList[Math.floor(Math.random() * scamTypesList.length)];
     const city = indianCities[Math.floor(Math.random() * indianCities.length)];
-
-    // Slight jitter for overlapping markers
     const jitter = () => (Math.random() - 0.5) * 0.1;
 
     reports.push({
@@ -83,7 +81,7 @@ const generateMockReports = (count = 300) => {
       title: `${scamType} #${i + 1}`,
       description: `Description for ${scamType} #${i + 1}`,
       type: scamType,
-      date: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000), // random last 30 days
+      date: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
       location: { lat: city.lat + jitter(), lng: city.lng + jitter() },
       city: city.name,
     });
@@ -116,6 +114,24 @@ export default function FraudMapPage() {
 
     return matchesType && matchesRecency;
   });
+
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!,
+  });
+
+  if (loadError) return <div>Error loading Google Maps</div>;
+  if (!isLoaded) return <div>Loading Google Maps...</div>;
+
+  // Cluster style
+  const clusterStyles = [
+    {
+      textColor: "white",
+      url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m1.png",
+      height: 50,
+      width: 50,
+      textSize: 14,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-teal-900 to-green-900 text-white">
@@ -168,48 +184,58 @@ export default function FraudMapPage() {
 
         {/* Map */}
         <div className="shadow-lg border border-cyan-500/20 overflow-hidden rounded-2xl">
-          <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!}>
-            <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={5}>
-              <MarkerClusterer averageCenter enableRetinaIcons gridSize={60}>
-                {(clusterer) => (
-                  <>
-                    {filteredReports.map((report) => (
-                      <Marker
-                        key={report.id}
-                        position={report.location}
-                        clusterer={clusterer}
-                        icon={{
-                          path: google.maps.SymbolPath.CIRCLE,
-                          fillColor: markerColors[report.type] || "white",
-                          fillOpacity: 0.9,
-                          strokeWeight: 0,
-                          scale: 10,
-                        }}
-                        onClick={() => setActiveMarker(report.id)}
-                      >
-                        {activeMarker === report.id && (
-                          <InfoWindow
-                            position={report.location}
-                            onCloseClick={() => setActiveMarker(null)}
-                          >
-                            <div className="text-black max-w-xs">
-                              <h3 className="font-bold">{report.title}</h3>
-                              <p>{report.description}</p>
-                              <p className="text-sm text-gray-600">{report.type}</p>
-                              <p className="text-xs text-gray-500">
-                                {new Date(report.date).toLocaleDateString()}
-                              </p>
-                              <p className="text-xs text-gray-500">{report.city}</p>
-                            </div>
-                          </InfoWindow>
-                        )}
-                      </Marker>
-                    ))}
-                  </>
-                )}
-              </MarkerClusterer>
-            </GoogleMap>
-          </LoadScript>
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={5}>
+            <MarkerClusterer
+              averageCenter
+              enableRetinaIcons
+              gridSize={60}
+              styles={clusterStyles}
+              onClick={(cluster) => {
+                const map = cluster.getMap();
+                if (map && "fitBounds" in map) {
+                  map.fitBounds(cluster.getBounds());
+                }
+              }}
+            >
+              {(clusterer) => (
+                <>
+                  {filteredReports.map((report) => (
+                    <Marker
+                      key={report.id}
+                      position={report.location}
+                      clusterer={clusterer}
+                      icon={{
+                        path: google.maps.SymbolPath.CIRCLE,
+                        fillColor: markerColors[report.type] || "#fff",
+                        fillOpacity: 1,
+                        strokeColor: "#000",
+                        strokeWeight: 2,
+                        scale: 14,
+                      }}
+                      onClick={() => setActiveMarker(report.id)}
+                    >
+                      {activeMarker === report.id && (
+                        <InfoWindow
+                          position={report.location}
+                          onCloseClick={() => setActiveMarker(null)}
+                        >
+                          <div className="text-black max-w-xs">
+                            <h3 className="font-bold">{report.title}</h3>
+                            <p>{report.description}</p>
+                            <p className="text-sm text-gray-600">{report.type}</p>
+                            <p className="text-xs text-gray-500">
+                              {new Date(report.date).toLocaleDateString()}
+                            </p>
+                            <p className="text-xs text-gray-500">{report.city}</p>
+                          </div>
+                        </InfoWindow>
+                      )}
+                    </Marker>
+                  ))}
+                </>
+              )}
+            </MarkerClusterer>
+          </GoogleMap>
         </div>
       </div>
     </div>

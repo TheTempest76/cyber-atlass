@@ -6,13 +6,31 @@ import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { collection, addDoc, doc, getDoc, serverTimestamp } from "firebase/firestore";
 
+// Use the same types as your map
+const scamTypesList = [
+  "Fake E-commerce Scam",
+  "Fake Job Offer Scam",
+  "SIM Card Replacement Scam",
+  "WhatsApp Account Hacking Scam",
+  "Cryptocurrency Investment Scam",
+  "UPI Scam",
+  "WhatsApp Lottery/Prize Scam",
+  "Phishing Scam (Link Sharing)",
+  "Fake Technical Support Scam",
+  "Fake Charity/Donation Scam",
+  "Fake Loan Approval Scam",
+  "Fake Discount/Refund Scam",
+  "Tax Refund Scam",
+  "Friend in Distress Scam",
+];
+
 export default function SubmitScamPage() {
   const router = useRouter();
 
   // Form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [scamType, setScamType] = useState("Phishing");
+  const [scamType, setScamType] = useState(scamTypesList[0]);
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [tags, setTags] = useState("");
@@ -68,7 +86,7 @@ export default function SubmitScamPage() {
         reporterName: currentUser.displayName || currentUser.email,
         reporterEmail: currentUser.email,
         tags: tags.split(",").map((t) => t.trim()),
-        evidence: evidence || null, // NEW FIELD
+        evidence: evidence || null,
         location: userLocation || null,
         createdAt: serverTimestamp(),
       });
@@ -141,15 +159,15 @@ export default function SubmitScamPage() {
               onChange={(e) => setScamType(e.target.value)}
               className="w-full p-3 rounded-lg bg-black/60 border border-gray-700 focus:outline-none focus:border-teal-400"
             >
-              <option>Phishing</option>
-              <option>Investment Fraud</option>
-              <option>Job Scam</option>
-              <option>SMS/Call Scam</option>
-              <option>Other</option>
+              {scamTypesList.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
             </select>
           </div>
 
-          {/* Date and Time side by side */}
+          {/* Date and Time */}
           <div className="flex gap-4">
             <div className="flex-1">
               <label className="block mb-2 font-semibold">Date of Incident (optional)</label>
