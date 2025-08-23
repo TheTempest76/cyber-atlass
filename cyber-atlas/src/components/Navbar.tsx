@@ -16,10 +16,11 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navLinks = [
-    { name: "Threat Reports", href: "/Home" },
-    { name: "Verify Threat", href: "/Home/verify" },
+    { name: "Home", href: "/Home" },
+    { name: "Threat Reports", href: "/Home/Posts" },
+    { name: "Verify Threat", href: "/Home/Verify" },
     { name: "Cyber Intel", href: "/Home/News" },
-    { name: "Threat Map", href: "/Home/map" },
+    { name: "Threat Map", href: "/Home/Map" },
     { name: "Phish Finder", href: "/Home/phish-finder" }
   ];
 

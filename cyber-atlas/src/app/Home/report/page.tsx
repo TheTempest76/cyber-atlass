@@ -92,7 +92,7 @@ export default function SubmitScamPage() {
       });
 
       alert("Scam report submitted!");
-      router.push("/Home");
+      router.push("/Home/Posts");
     } catch (error) {
       console.error("Error submitting report:", error);
       alert("Failed to submit report.");
