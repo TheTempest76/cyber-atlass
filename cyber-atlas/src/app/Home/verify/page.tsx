@@ -49,10 +49,11 @@ const VerifyThreatPage: React.FC = () => {
 
     setIsGeneratingSummary(true);
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=2a2aca377ba601b042af2cc43800b9ccf4e3b8f1`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-goog-api-key': '' + process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
         },
         body: JSON.stringify({
           contents: [{
@@ -68,7 +69,6 @@ Detailed Results:
 ${results.results.map((result, index) => `
 Result ${index + 1}:
 - Scam Type: ${result.scam_type}
-- Risk Level: ${result.risk_label}
 - Detection Score: ${result.score}
 - Probability: ${(result.prob * 100).toFixed(1)}%
 - Detection Reasons: ${result.why.map(reason => Array.isArray(reason) ? reason.join(', ') : reason).join('; ')}
@@ -92,7 +92,8 @@ Keep the summary concise but informative, avoiding technical jargon where possib
       }
 
       const data = await response.json();
-      const generatedSummary = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Unable to generate summary';
+      // Remove all occurrences of '**' from the generated summary
+      const generatedSummary = data.candidates?.[0]?.content?.parts?.[0]?.text.replace(/\*\*/g, "") || 'Unable to generate summary';
       setSummary(generatedSummary);
     } catch (err) {
       console.error('Error generating summary:', err);
