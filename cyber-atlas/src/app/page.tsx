@@ -86,8 +86,9 @@ export default function SignupPage() {
       });
 
       router.push("/Home");
-    } catch (err: any) {
-      setMessage(`❌ Error: ${err.message}`);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setMessage(`❌ Error: ${errorMessage}`);
     } finally {
       setLoading(false);
     }

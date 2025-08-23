@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type Article = {
   source: {
@@ -32,7 +33,6 @@ export default function CybercrimeNewsPage() {
   const router = useRouter();
 
   const articlesPerPage = 10;
-  const apiKey = "facebf0e18704e9aadfeb08b134d3cd2";
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -150,9 +150,11 @@ export default function CybercrimeNewsPage() {
                 {/* Article image */}
                 {article.urlToImage && (
                   <div className="lg:w-1/3 flex-shrink-0">
-                    <img
+                    <Image
                       src={article.urlToImage}
                       alt={article.title}
+                      width={400}
+                      height={200}
                       className="w-full h-48 lg:h-32 object-cover rounded-lg border border-cyan-500/20"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = 'none';
