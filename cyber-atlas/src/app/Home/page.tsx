@@ -10,7 +10,7 @@ type Report = {
   title: string;
   description: string;
   scamType: string;
-  createdAt: any;
+  createdAt: Date | string;
   reporterName?: string;
   reporterEmail?: string;
   date?: string;

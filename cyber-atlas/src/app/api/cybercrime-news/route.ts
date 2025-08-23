@@ -56,13 +56,14 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
     
     // Filter out articles with incomplete data
-    const filteredArticles = data.articles.filter((article: any) => 
-      article.title && 
-      article.title !== '[Removed]' && 
-      article.description && 
-      article.description !== '[Removed]' &&
-      article.url
-    );
+    const filteredArticles = data.articles.filter((article: unknown) => {
+      const articleObj = article as { title?: string; description?: string; url?: string };
+      return articleObj.title && 
+        articleObj.title !== '[Removed]' && 
+        articleObj.description && 
+        articleObj.description !== '[Removed]' &&
+        articleObj.url;
+    });
 
     return NextResponse.json({
       status: data.status,

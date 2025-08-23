@@ -294,7 +294,7 @@ Keep the summary concise but informative, avoiding technical jargon where possib
                 </div>
               ) : (
                 <div className="bg-gray-900/60 border border-purple-500/20 rounded-lg p-4 text-gray-400 text-center">
-                  Click "Generate Summary" to get an AI-powered analysis of the results
+                  Click &quot;Generate Summary&quot; to get an AI-powered analysis of the results
                 </div>
               )}
             </div>
