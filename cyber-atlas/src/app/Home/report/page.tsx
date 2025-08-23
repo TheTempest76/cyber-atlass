@@ -6,7 +6,7 @@ import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { collection, addDoc, doc, getDoc, serverTimestamp } from "firebase/firestore";
 
-// Use the same types as your map
+// List of scam types
 const scamTypesList = [
   "Fake E-commerce Scam",
   "Fake Job Offer Scam",
@@ -34,11 +34,12 @@ export default function SubmitScamPage() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [tags, setTags] = useState("");
-  const [evidence, setEvidence] = useState(""); // NEW FIELD
+  const [evidence, setEvidence] = useState("");
 
-  // Auth & user document state
+  // Auth & user state
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [userType, setUserType] = useState<string | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
   // Listen for auth state
@@ -52,11 +53,18 @@ export default function SubmitScamPage() {
         const userSnapshot = await getDoc(userDocRef);
         if (userSnapshot.exists()) {
           const data = userSnapshot.data();
+
+          // Set location if exists
           if (data.location) {
             setUserLocation({
               latitude: data.location.latitude,
               longitude: data.location.longitude,
             });
+          }
+
+          // Set user type if exists
+          if (data.type) {
+            setUserType(data.type);
           }
         }
       } else {
@@ -88,6 +96,7 @@ export default function SubmitScamPage() {
         tags: tags.split(",").map((t) => t.trim()),
         evidence: evidence || null,
         location: userLocation || null,
+        userType: userType || "unknown",
         createdAt: serverTimestamp(),
       });
 
