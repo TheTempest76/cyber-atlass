@@ -69,12 +69,7 @@ type Report = {
   id: string;
   title: string;
   description: string;
-  scamType: string;
-  createdAt: any;
-  reporterName?: string;
-  reporterEmail?: string;
-  date?: string;
-  time?: string;
+  userType?: string;
   tags?: string[];
 };
 
