@@ -376,6 +376,21 @@ Keep the summary concise but informative, avoiding technical jargon where possib
             </div>
           </div>
         )}
+
+
+        {/* Report Button */}
+<div className="mt-10 flex justify-center">
+  <a
+    href="https://cybercrime.gov.in/Webform/Crime_ReportAnonymously.aspx"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-green-500 hover:from-cyan-400 hover:to-green-400 text-gray-900 font-semibold shadow-lg flex items-center gap-2 transition-all"
+  >
+    <AlertTriangle className="w-5 h-5" />
+    Report Anonymously to Cyber Crime
+  </a>
+</div>
+
       </div>
     </div>
   );
