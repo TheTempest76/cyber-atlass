@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const pathname = usePathname();
   const [currentPath, setCurrentPath] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setCurrentPath(pathname);
@@ -16,17 +20,27 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navLinks = [
-    { name: "Home", href: "/Home" },
-    { name: "Threat Reports", href: "/Home/Posts" },
-    { name: "Verify Threat", href: "/Home/Verify" },
+    { name: "Threat Reports", href: "/Home" },
+    { name: "Verify Threat", href: "/Home/verify" },
     { name: "Cyber Intel", href: "/Home/News" },
-    { name: "Threat Map", href: "/Home/Map" },
-    { name: "Phish Finder", href: "/Home/phish-finder" }
+    { name: "Threat Map", href: "/Home/map" },
+    { name: "Phish Finder", href: "/Home/phish-finder" },
   ];
 
-  const handleLogout = () => {
-    console.log("User logged out");
-    // Add your auth logout logic here
+  const handleLogout = async () => {
+    if (loggingOut) return;
+    try {
+      setLoggingOut(true);
+      await signOut(auth);
+      // Optional: clear any local state or storage you keep
+      // localStorage.clear(); sessionStorage.clear();
+      router.replace("/Auth/signin"); // use your actual route casing from the build
+    } catch (err) {
+      console.error("Logout failed:", err);
+      // You can add a toast here if you use one
+    } finally {
+      setLoggingOut(false);
+    }
   };
 
   // Shared classes for hover & active effect
@@ -79,9 +93,15 @@ export default function Navbar() {
 
             <button
               onClick={handleLogout}
-              className="px-3 py-2 rounded-md text-red-500 bg-[#111111]"
+              disabled={loggingOut}
+              className={`px-3 py-2 rounded-md ${
+                loggingOut
+                  ? "text-gray-400 bg-[#0f0f0f] cursor-not-allowed"
+                  : "text-red-500 bg-[#111111] hover:bg-[#161616]"
+              } transition`}
+              aria-busy={loggingOut}
             >
-              Log Out
+              {loggingOut ? "Logging out..." : "Log Out"}
             </button>
           </div>
 
@@ -140,13 +160,19 @@ export default function Navbar() {
         ))}
 
         <button
-          onClick={() => {
-            handleLogout();
+          onClick={async () => {
+            await handleLogout();
             setIsOpen(false);
           }}
-          className="block w-[calc(100%-1rem)] mx-2 my-1 px-4 py-2 rounded-md text-red-500 bg-[#111111]"
+          disabled={loggingOut}
+          className={`block w-[calc(100%-1rem)] mx-2 my-1 px-4 py-2 rounded-md ${
+            loggingOut
+              ? "text-gray-400 bg-[#0f0f0f] cursor-not-allowed"
+              : "text-red-500 bg-[#111111]"
+          }`}
+          aria-busy={loggingOut}
         >
-          Log Out
+          {loggingOut ? "Logging out..." : "Log Out"}
         </button>
       </div>
     </nav>
