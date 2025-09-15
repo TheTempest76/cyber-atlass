@@ -57,16 +57,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Powered by */}
-        <div className="mb-16 opacity-80">
-          <p className="text-center text-xs uppercase tracking-widest text-cyan-200/70">Powered by modern web</p>
-          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-6 items-center justify-items-center">
-            <img src="/next.svg" alt="Next.js" className="h-6" />
-            <img src="/vercel.svg" alt="Vercel" className="h-6" />
-            <img src="/window.svg" alt="Security" className="h-6" />
-            <img src="/file.svg" alt="Toolkit" className="h-6" />
-          </div>
-        </div>
+        
 
         {/* Features Section */}
         <div className="grid md:grid-cols-3 gap-5 lg:gap-8 mb-16 md:mb-20">
