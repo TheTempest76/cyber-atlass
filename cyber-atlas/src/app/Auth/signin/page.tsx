@@ -99,7 +99,7 @@ export default function SigninPage() {
           </button>
 
           <Link
-            href="/Auth/signup"
+            href="/auth/signup"
             className="w-1/2 rounded-lg bg-gray-200 py-3 text-center font-semibold text-gray-700 hover:bg-gray-300 transition"
           >
             Sign Up

@@ -144,7 +144,7 @@ export default function SignupPage() {
           </button>
 
           <Link
-            href="/Auth/signin"
+            href="/auth/signin"
             className="w-1/2 rounded-lg bg-gray-200 py-3 text-center font-semibold text-gray-700 hover:bg-gray-300 transition"
           >
             Sign In
