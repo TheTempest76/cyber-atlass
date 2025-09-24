@@ -34,13 +34,13 @@ export default function LandingPage() {
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 md:justify-start justify-center">
               <Link
-                href="/auth/signup"
+                href="/Auth/signup"
                 className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-gray-900 font-semibold rounded-xl shadow-lg transition-all transform hover:scale-105"
               >
                 Get Started
               </Link>
               <Link
-                href="/auth/signin"
+                href="/Auth/signin"
                 className="px-8 py-4 bg-black/40 border border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-300 font-semibold rounded-xl transition-all"
               >
                 Sign In
@@ -134,7 +134,7 @@ export default function LandingPage() {
           <h2 className="text-3xl font-bold text-cyan-300 mb-4">Ready to protect yourself?</h2>
           <p className="text-gray-200 mb-8">Join thousands of users who are already staying safe with Cyber Atlas.</p>
           <Link
-            href="/auth/signup"
+            href="/Auth/signup"
             className="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-gray-900 font-semibold rounded-xl shadow-lg transition-all transform hover:scale-105"
           >
             Create Your Account
