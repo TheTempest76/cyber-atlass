@@ -33,7 +33,7 @@ export default function SigninPage() {
             lastLogin: new Date(),
           });
 
-          router.push("/home");
+          router.push("/Home");
         },
         async (error) => {
           console.warn("Location not available:", error);
@@ -42,7 +42,7 @@ export default function SigninPage() {
             lastLogin: new Date(),
           });
 
-          router.push("/home");
+          router.push("/Home");
         }
       );
     } catch (err: any) {

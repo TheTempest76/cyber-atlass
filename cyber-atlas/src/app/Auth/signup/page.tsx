@@ -85,7 +85,7 @@ export default function SignupPage() {
         createdAt: new Date(),
       });
 
-      router.push("/home");
+      router.push("/Home");
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
       setMessage(`❌ Error: ${errorMessage}`);
